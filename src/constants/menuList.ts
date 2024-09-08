@@ -2,30 +2,30 @@ import { AppHeaderNavListInterface } from "../interfaces";
 
 export const AppHeaderNavigationList: Array<AppHeaderNavListInterface> = [
   {
-    name: 'Home',
-    relPath: '/'
+    name: "Home",
+    relPath: "/",
   },
   {
-    name: 'About',
-    relPath: '/'
+    name: "About",
+    relPath: "/",
   },
   {
-    name: 'Login',
-    relPath: '/'
+    name: "Login",
+    relPath: "/",
   },
 ];
 
 export const UserMenuList: Array<AppHeaderNavListInterface> = [
   {
-    name: 'Profile',
-    relPath: '/profile'
+    name: "Profile",
+    relPath: "/profile",
   },
   {
-    name: 'Account',
-    relPath: '/account'
+    name: "Account",
+    relPath: "/account",
   },
   {
-    name: 'Logout',
-    relPath: '/logout'
+    name: "Logout",
+    relPath: "/logout",
   },
-]
+];

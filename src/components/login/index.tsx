@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const Login: React.FC = () => {
   const navigateTo = useNavigate();
@@ -15,7 +16,7 @@ const Login: React.FC = () => {
         <input type="email" />
       </div>
       <div>
-        <button type="submit" onClick={handleSubmit}>Login</button>
+        <Button type="submit" onClick={handleSubmit} variant="contained">Log in</Button>
       </div>
     </>
   )

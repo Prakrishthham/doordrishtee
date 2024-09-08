@@ -16,7 +16,7 @@ const Login: React.FC = () => {
         <input type="email" />
       </div>
       <div>
-        <Button type="submit" onClick={handleSubmit} variant="contained">Login</Button>
+        <Button type="submit" onClick={handleSubmit} variant="contained">Log in</Button>
       </div>
     </>
   )

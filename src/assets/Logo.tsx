@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unknown-property */
+import React from "react";
 import { createSvgIcon } from '@mui/material';
 
 export const Logo = createSvgIcon(

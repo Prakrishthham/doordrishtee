@@ -1,9 +1,10 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 const Login: React.FC = () => {
   const navigateTo = useNavigate();
-  function handleSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+  function handleSubmit(): void {
     navigateTo('/home');
   }
 

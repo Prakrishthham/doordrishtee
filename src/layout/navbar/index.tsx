@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AppBar,
   Avatar,
@@ -19,12 +20,15 @@ import {
   AppHeaderNavigationList,
   UserMenuList,
 } from "../../constants/menuList";
+import { Link } from "react-router-dom";
+
 
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const pages = AppHeaderNavigationList;
   const settings = UserMenuList;
+  const navigateTo = useNavigate();
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -32,7 +36,8 @@ const Navbar: React.FC = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (relUrl: string) => {
+    navigateTo(relUrl);
     setAnchorElNav(null);
   };
 
@@ -54,8 +59,8 @@ const Navbar: React.FC = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to={"/"}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -97,7 +102,7 @@ const Navbar: React.FC = () => {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.name} onClick={() => handleCloseNavMenu(page.relPath)}>
                   <Typography sx={{ textAlign: "center" }}>
                     {page.name}
                   </Typography>
@@ -117,8 +122,8 @@ const Navbar: React.FC = () => {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to={"/"}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -136,7 +141,7 @@ const Navbar: React.FC = () => {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page.relPath)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.name}

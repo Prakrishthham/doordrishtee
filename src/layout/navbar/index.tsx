@@ -82,6 +82,7 @@ const Navbar: React.FC = () => {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              data-testid="sideMenuNavigation"
             >
               <MenuIcon />
             </IconButton>
@@ -149,7 +150,7 @@ const Navbar: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Open settings" data-testid="userButton">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="" />
               </IconButton>

@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   AppBar,
   Avatar,
@@ -20,7 +21,6 @@ import {
   AppHeaderNavigationList,
   UserMenuList,
 } from "../../constants/menuList";
-import { Link } from "react-router-dom";
 
 
 const Navbar: React.FC = () => {
@@ -29,6 +29,8 @@ const Navbar: React.FC = () => {
   const pages = AppHeaderNavigationList;
   const settings = UserMenuList;
   const navigateTo = useNavigate();
+  const { logout  } = useAuth0();
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -41,7 +43,10 @@ const Navbar: React.FC = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (relPath: string | never) => {
+    if(relPath && relPath === '/logout') {
+      logout({ logoutParams: { returnTo: window.location.origin } });
+    }
     setAnchorElUser(null);
   };
   return (
@@ -172,7 +177,7 @@ const Navbar: React.FC = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.relPath)}>
                   <Typography sx={{ textAlign: "center" }}>
                     {setting.name}
                   </Typography>

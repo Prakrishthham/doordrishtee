@@ -8,6 +8,14 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
  useNavigate: () => mockedUsedNavigate,
 }));
+const mockLoginOut = jest.fn();
+
+jest.mock('@auth0/auth0-react', () => ({
+  ...jest.requireActual('@auth0/auth0-react'),
+  useAuth0: () => ({
+    logout: mockLoginOut
+  }),
+}));
 
 describe('Navbar Component', () => {
   it('renders navigation links', () => {
@@ -78,5 +86,18 @@ describe('Navbar Component', () => {
       const newProfileLink = screen.getAllByText('Profile');
       expect(newProfileLink[0]).not.toBeVisible();
     })
+    test('User logout functionality', () => {
+      render(
+        <MemoryRouter>
+          <Navbar />
+        </MemoryRouter>
+      );
+      const userButton = screen.getAllByTestId('userButton');
+      fireEvent.click(userButton[0]);
+      const profileLink = screen.getAllByText('Logout');
+      expect(profileLink[0]).toBeVisible();
+      fireEvent.click(profileLink[0]);
+      expect(mockLoginOut).toHaveBeenCalled();
+    });
   })
 });

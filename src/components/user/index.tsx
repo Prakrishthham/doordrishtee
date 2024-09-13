@@ -8,7 +8,7 @@ const User: React.FC = () => {
         <div>This is User Page</div>
         <div>{user?.name}</div>
         <div>{user?.email}</div>
-        <div><img src={user?.picture} /></div>
+        <div><img src={user?.picture} alt={user?.name}/></div>
       </div>
     </>
   )

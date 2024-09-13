@@ -8,12 +8,19 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
  useNavigate: () => mockedUsedNavigate,
 }));
-const mockLoginOut = jest.fn();
 
+const mockLoginOut = jest.fn();
+const mockloginWithRedirect = jest.fn();
+let mockIsAuthenticated = false;
 jest.mock('@auth0/auth0-react', () => ({
   ...jest.requireActual('@auth0/auth0-react'),
   useAuth0: () => ({
-    logout: mockLoginOut
+    logout: mockLoginOut,
+    loginWithRedirect: mockloginWithRedirect,
+    user: {
+      picture: 'hello'
+    },
+    isAuthenticated: mockIsAuthenticated
   }),
 }));
 
@@ -35,8 +42,8 @@ describe('Navbar Component', () => {
       );
       const aboutLink = screen.getAllByText('About');
       expect(aboutLink.length).toBeGreaterThan(1); // since both mobile and desktop views have different layout links
+      expect(aboutLink[0]).toBeVisible();
       fireEvent.click(aboutLink[0]);
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/about');
     });
     it('Opens the sideMenu', () => {
       render(
@@ -44,20 +51,16 @@ describe('Navbar Component', () => {
           <Navbar />
         </MemoryRouter>
       );
-      const aboutLink = screen.getAllByTestId('sideMenuNavigation');
-      expect(aboutLink.length).toBe(1); 
-      fireEvent.click(aboutLink[0]);
-    });
-    it('navigates to about page on click of Login Link', () => {
-      render(
-        <MemoryRouter>
-          <Navbar />
-        </MemoryRouter>
-      );
-      const loginLink = screen.getAllByText('Login');
-      expect(loginLink.length).toBeGreaterThan(1); // since both mobile and desktop views have different layout links
-      fireEvent.click(loginLink[1]);
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/login');
+      const navigationLink = screen.getAllByTestId('sideMenuNavigation');
+      expect(navigationLink.length).toBe(1); 
+      fireEvent.click(navigationLink[0]); 
+      const aboutLink = screen.getAllByText('About');
+      expect(aboutLink.length).toBeGreaterThan(1); // since both mobile and desktop views have different layout links
+      expect(aboutLink[1]).toBeVisible();
+      fireEvent.click(aboutLink[1]);
+      expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+      expect(mockedUsedNavigate).toHaveBeenLastCalledWith('/about');
+      fireEvent.click(screen.getAllByTestId('userButton')[0]);
     });
   });
   describe('test use nav links', () => {
@@ -70,9 +73,24 @@ describe('Navbar Component', () => {
       const userButton = screen.getAllByTestId('userButton');
       expect(userButton.length).toBe(1);
       fireEvent.click(userButton[0]);
-      expect(screen.getAllByText('Profile').length).toBe(1);
+      expect(screen.getAllByText('Login').length).toBe(1);
+    });
+    test('should called okta method loginWithRedirect on click of login button', () => {
+      render(
+        <MemoryRouter>
+          <Navbar />
+        </MemoryRouter>
+      );
+      const userButton = screen.getAllByTestId('userButton');
+      expect(userButton.length).toBe(1);
+      fireEvent.click(userButton[0]);
+      const loginButton = screen.getAllByText('Login');
+      expect(loginButton.length).toBe(1);
+      fireEvent.click(loginButton[0]);
+      expect(mockloginWithRedirect).toHaveBeenCalledTimes(1);
     });
     test('should close the user menu on click of profile link', () => {
+      mockIsAuthenticated = true;
       render(
         <MemoryRouter>
           <Navbar />
@@ -85,8 +103,10 @@ describe('Navbar Component', () => {
       fireEvent.click(profileLink[0]);
       const newProfileLink = screen.getAllByText('Profile');
       expect(newProfileLink[0]).not.toBeVisible();
+      mockIsAuthenticated = false;
     })
     test('User logout functionality', () => {
+      mockIsAuthenticated = true;
       render(
         <MemoryRouter>
           <Navbar />
@@ -98,6 +118,7 @@ describe('Navbar Component', () => {
       expect(profileLink[0]).toBeVisible();
       fireEvent.click(profileLink[0]);
       expect(mockLoginOut).toHaveBeenCalled();
+      mockIsAuthenticated = false;
     });
   })
 });

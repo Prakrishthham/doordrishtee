@@ -33,4 +33,4 @@ jobs:
       - name: Lint tests
         run: yarn lint
       - name: Unit tests
-        run: yarn test
+        run: yarn unitTestCoverage

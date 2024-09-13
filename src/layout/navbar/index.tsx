@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   AppBar,
   Avatar,
@@ -20,11 +22,15 @@ import {
   UserMenuList,
 } from "../../constants/menuList";
 
+
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const pages = AppHeaderNavigationList;
   const settings = UserMenuList;
+  const navigateTo = useNavigate();
+  const { logout  } = useAuth0();
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -32,11 +38,15 @@ const Navbar: React.FC = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (relUrl: string) => {
+    navigateTo(relUrl);
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (relPath: string | never) => {
+    if(relPath && relPath === '/logout') {
+      logout({ logoutParams: { returnTo: window.location.origin } });
+    }
     setAnchorElUser(null);
   };
   return (
@@ -54,8 +64,8 @@ const Navbar: React.FC = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to={"/"}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -77,6 +87,7 @@ const Navbar: React.FC = () => {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              data-testid="sideMenuNavigation"
             >
               <MenuIcon />
             </IconButton>
@@ -97,7 +108,7 @@ const Navbar: React.FC = () => {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.name} onClick={() => handleCloseNavMenu(page.relPath)}>
                   <Typography sx={{ textAlign: "center" }}>
                     {page.name}
                   </Typography>
@@ -117,8 +128,8 @@ const Navbar: React.FC = () => {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to={"/"}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -136,7 +147,7 @@ const Navbar: React.FC = () => {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page.relPath)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.name}
@@ -144,7 +155,7 @@ const Navbar: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Open settings" data-testid="userButton">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="" />
               </IconButton>
@@ -166,7 +177,7 @@ const Navbar: React.FC = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.relPath)}>
                   <Typography sx={{ textAlign: "center" }}>
                     {setting.name}
                   </Typography>

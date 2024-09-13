@@ -2,16 +2,12 @@ import { AppHeaderNavListInterface } from "../interfaces";
 
 export const AppHeaderNavigationList: Array<AppHeaderNavListInterface> = [
   {
-    name: "Home",
-    relPath: "/",
-  },
-  {
     name: "About",
-    relPath: "/",
+    relPath: "/about",
   },
   {
     name: "Login",
-    relPath: "/",
+    relPath: "/login",
   },
 ];
 

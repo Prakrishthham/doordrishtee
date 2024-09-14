@@ -5,8 +5,12 @@ import Login from "../components/login";
 import Home from "../components/home";
 import About from "../components/about";
 import Navbar from "../layout/navbar";
+import User from "../components/user";
+import Preferences from "../components/preferences";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Router = () => {
+  const { isAuthenticated } = useAuth0();
   return (
     <BrowserRouter>
       <Navbar />
@@ -16,6 +20,8 @@ const Router = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
+          {isAuthenticated && <Route path="/user" element={<User />} />}
+          {isAuthenticated && <Route path="/preferences" element={<Preferences />} />}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

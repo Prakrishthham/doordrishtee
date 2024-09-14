@@ -5,20 +5,16 @@ export const AppHeaderNavigationList: Array<AppHeaderNavListInterface> = [
     name: "About",
     relPath: "/about",
   },
-  {
-    name: "Login",
-    relPath: "/login",
-  },
 ];
 
 export const UserMenuList: Array<AppHeaderNavListInterface> = [
   {
     name: "Profile",
-    relPath: "/profile",
+    relPath: "/user",
   },
   {
-    name: "Account",
-    relPath: "/account",
+    name: "Preferences",
+    relPath: "/preferences",
   },
   {
     name: "Logout",

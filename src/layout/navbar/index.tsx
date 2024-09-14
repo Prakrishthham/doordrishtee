@@ -22,14 +22,13 @@ import {
   UserMenuList,
 } from "../../constants/menuList";
 
-
 const Navbar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const pages = AppHeaderNavigationList;
   const settings = UserMenuList;
   const navigateTo = useNavigate();
-  const { logout  } = useAuth0();
+  const { logout, user, isAuthenticated, loginWithRedirect } = useAuth0();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -38,16 +37,22 @@ const Navbar: React.FC = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (relUrl: string) => {
-    navigateTo(relUrl);
+  const handleCloseNavMenu = (relUrl: string | React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(null);
+    if(relUrl && typeof relUrl === 'string') {
+      navigateTo(relUrl);
+    }
   };
 
-  const handleCloseUserMenu = (relPath: string | never) => {
-    if(relPath && relPath === '/logout') {
-      logout({ logoutParams: { returnTo: window.location.origin } });
-    }
+  const handleCloseUserMenu = (relPath: string | React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(null);
+    if (relPath && relPath === "/logout") {
+      logout({ logoutParams: { returnTo: window.location.origin } });
+    } else if (relPath && relPath === "/login") {
+      loginWithRedirect();
+    } else if(relPath && typeof relPath === 'string') {
+      navigateTo(relPath);
+    }
   };
   return (
     <AppBar position="static">
@@ -106,9 +111,14 @@ const Navbar: React.FC = () => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
+              data-testid="sideMenu"
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={() => handleCloseNavMenu(page.relPath)}>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => handleCloseNavMenu(page.relPath)}
+                  data-testid={page.name}
+                >
                   <Typography sx={{ textAlign: "center" }}>
                     {page.name}
                   </Typography>
@@ -155,9 +165,9 @@ const Navbar: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings" data-testid="userButton">
+            <Tooltip title="User Menu" data-testid="userButton">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="" />
+                <Avatar alt="Remy Sharp" src={user?.nickname} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -176,13 +186,27 @@ const Navbar: React.FC = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.relPath)}>
+              {isAuthenticated ? (
+                settings.map((setting) => (
+                  <MenuItem
+                    key={setting.name}
+                    onClick={() => handleCloseUserMenu(setting.relPath)}
+                  >
+                    <Typography sx={{ textAlign: "center" }}>
+                      {setting.name}
+                    </Typography>
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem
+                  key={"login"}
+                  onClick={() => handleCloseUserMenu("/login")}
+                >
                   <Typography sx={{ textAlign: "center" }}>
-                    {setting.name}
+                    {"Login"}
                   </Typography>
                 </MenuItem>
-              ))}
+              )}
             </Menu>
           </Box>
         </Toolbar>

@@ -46,7 +46,6 @@ jobs:
       run: yarn build
 
   test:
-    needs: build
     runs-on: ubuntu-latest
 
     strategy:

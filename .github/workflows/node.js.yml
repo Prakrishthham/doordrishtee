@@ -46,10 +46,7 @@ jobs:
       run: yarn build
 
     - name: Run linters
-      uses: wearerequired/lint-action@v2
-      with:
-        eslint: true
-        prettier: true
+      run: yarn lint
 
     - name: Run tests and generate coverage report
       run: yarn unitTestCoverage

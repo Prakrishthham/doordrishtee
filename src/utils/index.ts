@@ -1,1 +1,3 @@
-export const name = ['utils'];
+export const utils = ["utils"];
+
+export default { utils };

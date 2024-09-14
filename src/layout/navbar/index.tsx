@@ -111,6 +111,7 @@ const Navbar: React.FC = () => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
+              data-testid="sideMenu"
             >
               {pages.map((page) => (
                 <MenuItem

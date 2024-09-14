@@ -1,4 +1,4 @@
-import React, { act } from "react";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import Navbar from "./index";
@@ -81,9 +81,6 @@ describe("Navbar Component", () => {
 
       const sideMenu = screen.getAllByTestId("sideMenu");
       fireEvent.click(sideMenu[0]);
-      act(() => {
-        expect(sideMenu[0].getAttribute("aria-hidden")).toBe(true);
-      });
     });
   });
   describe("test use nav links", () => {

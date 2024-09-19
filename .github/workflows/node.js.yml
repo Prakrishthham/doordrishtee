@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
@@ -47,7 +47,7 @@ jobs:
       run: yarn build
 
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:

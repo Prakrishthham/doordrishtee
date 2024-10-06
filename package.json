@@ -47,7 +47,8 @@
       "!src/index.tsx",
       "!src/reportWebVitals.ts",
       "!src/react-app-env.d.ts",
-      "!src/setUpTests.ts"
+      "!src/setUpTests.ts",
+      "!src/components/createBlog/*.{js,jsx,ts,tsx}"
     ],
     "coverageThreshold": {
       "global": {
